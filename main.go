@@ -19,7 +19,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	log.Info("Starting ECHONET-Lite server...")
+	log.Info("Starting ECHONET-Lite client...")
 	mc302vc, err := mc302vc.New(*mc302vcAddr)
 	if err != nil {
 		log.Error(err)
