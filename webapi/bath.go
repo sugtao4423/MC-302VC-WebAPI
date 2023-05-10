@@ -9,8 +9,11 @@ func (a *WebAPI) SetBathAuto(c echo.Context) error {
 	if err := c.Bind(&body); err != nil {
 		return err
 	}
+	if err := c.Validate(body); err != nil {
+		return err
+	}
 
-	err := a.mc302vc.SetBathAuto(body.Status)
+	err := a.mc302vc.SetBathAuto(*body.Status)
 	if err != nil {
 		return err
 	}
@@ -24,8 +27,11 @@ func (a *WebAPI) SetBathAdditionalHeating(c echo.Context) error {
 	if err := c.Bind(&body); err != nil {
 		return err
 	}
+	if err := c.Validate(body); err != nil {
+		return err
+	}
 
-	err := a.mc302vc.SetBathAdditionalHeating(body.Status)
+	err := a.mc302vc.SetBathAdditionalHeating(*body.Status)
 	if err != nil {
 		return err
 	}

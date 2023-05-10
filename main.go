@@ -33,6 +33,7 @@ func main() {
 	e := echo.New()
 	e.HideBanner = true
 	e.HTTPErrorHandler = a.ErrorHandler
+	e.Validator = a.NewJsonValidator()
 
 	api := e.Group("/api")
 	{

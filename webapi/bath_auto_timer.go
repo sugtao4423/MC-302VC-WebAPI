@@ -9,8 +9,11 @@ func (a *WebAPI) SetBathAutoTimer(c echo.Context) error {
 	if err := c.Bind(&body); err != nil {
 		return err
 	}
+	if err := c.Validate(body); err != nil {
+		return err
+	}
 
-	err := a.mc302vc.SetBathAutoTimer(body.Status)
+	err := a.mc302vc.SetBathAutoTimer(*body.Status)
 	if err != nil {
 		return err
 	}
@@ -24,8 +27,11 @@ func (a *WebAPI) SetBathAutoTimerTime(c echo.Context) error {
 	if err := c.Bind(&body); err != nil {
 		return err
 	}
+	if err := c.Validate(body); err != nil {
+		return err
+	}
 
-	err := a.mc302vc.SetBathAutoTimerTime(body.Hour, body.Minute)
+	err := a.mc302vc.SetBathAutoTimerTime(*body.Hour, *body.Minute)
 	if err != nil {
 		return err
 	}
