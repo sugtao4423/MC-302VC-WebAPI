@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MC-302VC-WebAPI</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+      .buttons {
+        display: flex;
+        align-items: end;
+        margin-left: -0.8rem;
+      }
+      .buttons > * {
+        margin-top: 0.8rem;
+        margin-left: 0.8rem;
+      }
+      .bath-auto-timer-setting {
+        width: 20rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="container py-4" v-cloak>
+      <div class="position-fixed top-0 end-0 p-3">
+        <div
+          id="liveToast"
+          class="toast text-white bg-danger"
+          :class="{ show: error.show, hide: !error.show }"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
+          <div class="toast-body">{{error.message}}</div>
+        </div>
+      </div>
+
+      <div v-if="!isLoggedIn">
+        <form>
+          <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+              <label for="usernameForm" class="form-label">Username</label>
+              <input
+                v-model="username"
+                type="text"
+                class="form-control"
+                id="usernameForm"
+              />
+            </div>
+          </div>
+
+          <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+              <label for="passwordForm" class="form-label">Password</label>
+              <input
+                v-model="password"
+                type="password"
+                class="form-control"
+                id="passwordForm"
+              />
+            </div>
+          </div>
+
+          <div class="row justify-content-center text-end">
+            <div class="col-md-6">
+              <button type="button" class="btn btn-primary" @click="login">
+                Login
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div v-if="data !== null">
+        <div>給湯機動作状態: {{readableStatus.operationStatus}}</div>
+        <div>給湯温度: {{readableStatus.waterTemp}}</div>
+        <div>風呂温度: {{readableStatus.bathTemp}}</div>
+        <div>風呂自動タイマー: {{readableStatus.bathAutoTimerStatus}}</div>
+        <div>風呂自動タイマー時間: {{readableStatus.bathAutoTimerTime}}</div>
+        <div>風呂動作状態: {{readableStatus.bathOperationStatus}}</div>
+        <div>風呂自動: {{readableStatus.bathAutoModeStatus}}</div>
+        <div>風呂追い焚き: {{readableStatus.bathAdditionalHeatingStatus}}</div>
+
+        <div class="mt-4 buttons">
+          <button
+            type="button"
+            :class="toggleButtonClass.bathAutoTimerStatus"
+            @click="toggleBathAutoTimer"
+          >
+            風呂自動タイマー{{toggleString.bathAutoTimerStatus}}
+          </button>
+          <div class="input-group bath-auto-timer-setting">
+            <input
+              v-model="bathAutoTime"
+              type="time"
+              class="form-control"
+              aria-describedby="bath-timer"
+            />
+            <button
+              class="btn btn-success"
+              type="button"
+              id="bath-timer"
+              @click="setBathAutoTimerTime"
+            >
+              設定
+            </button>
+          </div>
+        </div>
+        <div class="buttons">
+          <button
+            type="button"
+            :class="toggleButtonClass.bathAutoModeStatus"
+            @click="toggleBathAutoMode"
+          >
+            風呂自動{{toggleString.bathAutoModeStatus}}
+          </button>
+          <button
+            type="button"
+            :class="toggleButtonClass.bathAdditionalHeatingStatus"
+            @click="toggleBathAdditionalHeating"
+          >
+            風呂追い焚き{{toggleString.bathAdditionalHeatingStatus}}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
