@@ -5,11 +5,14 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/sugtao4423/MC-302VC-WebAPI/mc302vc"
 )
 
 type WebAPI struct {
-	mc302vc *mc302vc.MC302VC
+	mc302vc  *mc302vc.MC302VC
+	username string
+	password string
 }
 
 type StatusPostBody struct {
@@ -21,8 +24,8 @@ type TimerTimePostBody struct {
 	Minute *int `json:"minute" validate:"required"`
 }
 
-func New(mc302vc *mc302vc.MC302VC) *WebAPI {
-	return &WebAPI{mc302vc}
+func New(mc302vc *mc302vc.MC302VC, username, password string) *WebAPI {
+	return &WebAPI{mc302vc, username, password}
 }
 
 func (a *WebAPI) ErrorHandler(err error, c echo.Context) {
@@ -34,6 +37,12 @@ func (a *WebAPI) ErrorHandler(err error, c echo.Context) {
 func (a *WebAPI) jsonSuccess(c echo.Context) {
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"ok": true,
+	})
+}
+
+func (a *WebAPI) BasicAuthMiddleware() echo.MiddlewareFunc {
+	return middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+		return username == a.username && password == a.password, nil
 	})
 }
 

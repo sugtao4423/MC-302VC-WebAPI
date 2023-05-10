@@ -13,6 +13,8 @@ import (
 func main() {
 	mc302vcAddr := flag.String("addr", "", "IP address of MC-302VC")
 	webApiPort := flag.String("port", "8080", "Port number of Web API")
+	webUser := flag.String("user", "", "Username of Web API")
+	webPass := flag.String("pass", "", "Password of Web API")
 	flag.Parse()
 
 	if *mc302vcAddr == "" {
@@ -29,7 +31,7 @@ func main() {
 	defer mc302vc.Close()
 
 	log.Info("Starting Web API server...")
-	a := webapi.New(mc302vc)
+	a := webapi.New(mc302vc, *webUser, *webPass)
 	e := echo.New()
 	e.HideBanner = true
 	e.HTTPErrorHandler = a.ErrorHandler
@@ -37,6 +39,9 @@ func main() {
 
 	api := e.Group("/api")
 	{
+		if *webUser != "" && *webPass != "" {
+			api.Use(a.BasicAuthMiddleware())
+		}
 		api.GET("/status", a.GetStatus)
 		api.POST("/bathAutoTimer", a.SetBathAutoTimer)
 		api.POST("/bathAutoTimer/time", a.SetBathAutoTimerTime)
