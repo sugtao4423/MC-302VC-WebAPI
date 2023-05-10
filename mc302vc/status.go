@@ -7,14 +7,14 @@ import (
 )
 
 type Status struct {
-	OperationStatus             bool
-	WaterTemperature            int
-	BathTemperature             int
-	BathAutoTimerStatus         bool
-	BathAutoTimerTime           [2]int
-	BathOperationStatus         bool
-	BathAutoModeStatus          bool
-	BathAdditionalHeatingStatus bool
+	OperationStatus             bool   `json:"operation_status"`
+	WaterTemperature            int    `json:"water_temperature"`
+	BathTemperature             int    `json:"bath_temperature"`
+	BathAutoTimerStatus         bool   `json:"bath_auto_timer_status"`
+	BathAutoTimerTime           [2]int `json:"bath_auto_timer_time"`
+	BathOperationStatus         bool   `json:"bath_operation_status"`
+	BathAutoModeStatus          bool   `json:"bath_auto_mode_status"`
+	BathAdditionalHeatingStatus bool   `json:"bath_additional_heating_status"`
 }
 
 func (m *MC302VC) GetStatus() (*Status, error) {
