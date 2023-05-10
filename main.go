@@ -2,11 +2,13 @@ package main
 
 import (
 	"flag"
+	"net/http"
 	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/sugtao4423/MC-302VC-WebAPI/log"
 	"github.com/sugtao4423/MC-302VC-WebAPI/mc302vc"
+	"github.com/sugtao4423/MC-302VC-WebAPI/public"
 	"github.com/sugtao4423/MC-302VC-WebAPI/webapi"
 )
 
@@ -36,6 +38,9 @@ func main() {
 	e.HideBanner = true
 	e.HTTPErrorHandler = a.ErrorHandler
 	e.Validator = a.NewJsonValidator()
+
+	fs := http.FileServer(public.Root)
+	e.GET("/*", echo.WrapHandler(fs))
 
 	api := e.Group("/api")
 	{
