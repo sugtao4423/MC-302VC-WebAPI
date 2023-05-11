@@ -8,6 +8,12 @@ import (
 )
 
 func Validate(request *data.Data, response *data.Data) error {
+	for i := 0; i < len(request.TransactionID); i++ {
+		if request.TransactionID[i] != response.TransactionID[i] {
+			return fmt.Errorf("TransactionID is not match")
+		}
+	}
+
 	if request.ServiceID == codelist.ESV_Get &&
 		response.ServiceID != codelist.ESV_Get_Res {
 		return fmt.Errorf("ServiceID is not ESV_Get_Res")
