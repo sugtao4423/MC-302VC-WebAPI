@@ -1,11 +1,16 @@
 package enlrequest
 
 import (
+	"crypto/rand"
+
 	"github.com/sugtao4423/MC-302VC-WebAPI/echonetlite/codelist"
 	"github.com/sugtao4423/MC-302VC-WebAPI/echonetlite/data"
 )
 
 func Make(serviceID byte, properties []data.Property) *data.Data {
+	tid := make([]byte, 2)
+	rand.Read(tid)
+
 	ps := len(properties)
 	p := make([]data.Property, ps)
 	for i := 0; i < ps; i++ {
@@ -21,7 +26,7 @@ func Make(serviceID byte, properties []data.Property) *data.Data {
 			Protocol: 0x10,
 			Format:   0x81,
 		},
-		TransactionID: []byte{0x00, 0x00},
+		TransactionID: tid,
 		Source: &data.SEOJ{
 			ClassGroupCode: codelist.Group_ProfileObject,
 			ClassCode:      codelist.Class_NodeProfile,
